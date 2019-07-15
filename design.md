@@ -10,19 +10,23 @@ Ao clicar em um produto, veremos a tela de detalhes do mesmo, com opções para 
 
 ## Dados Enviados ao Back
 ### Lista de produtos
-Requisição GET para "api/produtos"
+Requisição GET para "api/produtos".
+
 Sem dados no corpo
 ### Criar
 Requisição POST para "api/produtos".
+
 Dados do novo produto enviados no corpo em formato JSON.
 ### Detalhes
-Requisição GET com id do produto: "api/produtos/{id}"
+Requisição GET com id do produto: "api/produtos/{id}".
+
 Sem corpo.
 ### Editar
-Requisição POST com o id do produto: "api/produtos/{id}"
+Requisição POST com o id do produto: "api/produtos/{id}".
+
 Atualizado no corpo em formato JSON.
 ### Deletar
-Requisição DELETE com o id do produto: "api/produtos/{id}"
+Requisição DELETE com o id do produto: "api/produtos/{id}".
 
 # Back
 Haverá rotas para:
