@@ -1,0 +1,22 @@
+.App {
+  max-width: 900px;
+  background-color: white;
+  margin: 0px auto;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  padding-bottom: 1px;
+}
+
+.header {
+  padding: 30px;
+  display: block;
+  background-color: rgb(23, 86, 180);
+}
+.header > a {
+  text-decoration: none;
+  color: white
+}
+
+#container {
+  padding: 30px;
+}
