@@ -1,4 +1,5 @@
 import React from 'react'
+import { Form, InputGroup, Button, FormControl, ListGroup, Container } from 'react-bootstrap'
 import './styles.css'
 
 import Produto from '../../components/produto'
@@ -22,18 +23,26 @@ export default class Lisa extends React.Component {
   }
   render() {
     return (
-      <div className="lista-produtos">
-        <ul>
+      <Container className="lista-produtos">
+        <ListGroup>
           {
             this.state.produtos
               .map(prod => <Produto key={prod.id} {...prod} />)
           }
-        </ul>
-        <form onSubmit={this.novoProdutoHandler.bind(this)}>
-          <input type="text" name="novo" id="NovoItem" placeholder="Novo Item" />
-          <button>Criar</button>
-        </form>
-      </div>
+        </ListGroup>
+
+        <Form onSubmit={this.novoProdutoHandler.bind(this)}>
+          <InputGroup>
+            <FormControl
+              placeholder="Novo Item"
+              id="NovoItem"
+            />
+            <InputGroup.Append>
+              <Button type="submit">Criar</Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </Form>
+      </Container>
     )
   }
 }

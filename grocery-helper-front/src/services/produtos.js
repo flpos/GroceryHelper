@@ -2,6 +2,22 @@ let produtos = [
   {
     id: 0,
     nome: 'Arroz',
+    alteracoes: [
+      {
+        data: new Date('07-17-2019'),
+        quantidade: 4
+      },
+      {
+        data: new Date('06-17-2019'),
+        quantidade: 3
+      }
+    ],
+    fim: "Amanhã",
+    mes: "10"
+  },
+  {
+    id: 1,
+    nome: 'Feijão',
     alteracoes: []
   }
 ]
