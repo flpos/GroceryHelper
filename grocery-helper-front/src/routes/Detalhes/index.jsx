@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Container, Button, ListGroup } from 'react-bootstrap'
+import { Row, Col, Container, Button, ListGroup, Form, FormGroup, FormControl } from 'react-bootstrap'
+import moment from 'moment'
+
 
 import database from '../../services/produtos'
 import './styles.css'
+
 
 export default class Detalhes extends Component {
   constructor(params) {
@@ -16,8 +19,26 @@ export default class Detalhes extends Component {
     let data = database.read(this.id)
     this.setState({ produto: data })
   }
-  novaAlteracao() {
+  mostrarModal = (e) => {
+    e.preventDefault()
+    document.querySelector('#modal').removeAttribute('hidden')
+  }
+  esconderModal = (e) => {
+    e.preventDefault()
+    document.querySelector('#modal').setAttribute('hidden', true)
+    document.querySelectorAll('.reset').forEach(input => input.value = '')
+  }
+  novaAlteracao = (e) => {
+    e.preventDefault()
+    let id = document.querySelector('#id').value
+    let data = document.querySelector('#data').value
+    let quantidade = document.querySelector('#quantidade').value
+    console.log(database.novaAlteracao(id, data, quantidade))
+    document.querySelector('#modal').setAttribute('hidden', true)
+    document.querySelectorAll('.reset').forEach(input => input.value = '')
 
+    let produto = database.read(id)
+    this.setState({ produto })
   }
   render() {
     return (
@@ -29,12 +50,12 @@ export default class Detalhes extends Component {
 
           <Col id='previsoes'>
             <Row>
-              <Col>Acaba:</Col>
-              <Col>{this.state.produto.fim}</Col>
+              <Col xs={8}>Acaba em:</Col>
+              <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1)?'meses':'mês'}</Col>
             </Row>
             <Row>
-              <Col>Uso por Mês:</Col>
-              <Col>{this.state.produto.mes}</Col>
+              <Col xs={8}>Uso estimado por Mês:</Col>
+              <Col className='align-right'>{this.state.produto.mes}</Col>
             </Row>
           </Col>
 
@@ -47,24 +68,33 @@ export default class Detalhes extends Component {
                 this.state.produto.alteracoes && this.state.produto.alteracoes.map((alt, index) => (
                   <ListGroup.Item className="alteracao" key={index}>
                     <Row>
-                      <Col>{alt.data.toISOString().slice(0, 10)}</Col>
-                      <Col>{alt.quantidade}</Col>
+                      <Col>{moment(alt.data).fromNow()}</Col>
+                      <Col className='align-right'>{alt.quantidade}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))
               }
-              <Button>Nova alteração</Button>
+              <Button onClick={this.mostrarModal}>Nova alteração</Button>
             </ListGroup>
           </Col>
 
-          <Col id="graficos">
-            <img src="https://via.placeholder.com/400x200" alt="Graficos" />
+          <Col>
+            <div id="graficos"></div>
           </Col>
         </Row>
 
-        <Row style={{padding: 15 + "px"}}>
+        <Row style={{ padding: 15 + "px" }}>
           <Button block variant="danger">Excluir</Button>
         </Row>
+        <Form id="modal" hidden>
+          <FormGroup id='container'>
+            <FormControl hidden id='id' value={this.id} readOnly />
+            <FormControl className="reset" type="date" name="data" id="data" />
+            <FormControl className="reset" type="number" name="quantidade" id="quantidade" />
+            <Button type="submit" variant="info" block onClick={this.novaAlteracao}>Nova alteração</Button>
+            <Button type="reset" variant="danger" block onClick={this.esconderModal}>Cancelar</Button>
+          </FormGroup>
+        </Form>
       </Container>
     )
   }

@@ -4,12 +4,12 @@ let produtos = [
     nome: 'Arroz',
     alteracoes: [
       {
-        data: new Date('07-17-2019'),
-        quantidade: 4
+        data: new Date('2019-06-15'),
+        quantidade: 20
       },
       {
-        data: new Date('06-17-2019'),
-        quantidade: 3
+        data: new Date('2019-07-17'),
+        quantidade: 10
       }
     ],
     fim: "Amanhã",
@@ -33,7 +33,23 @@ export default {
     return novo
   },
   read: id => {
-    return produtos.find(prod => prod.id === Number(id))
+    let produto = produtos.find(prod => prod.id === Number(id))
+
+    let uso = []
+    if (!!produto.alteracoes) {
+      for (let i = 0; i < produto.alteracoes.length - 1; i++) {
+        let alt1 = produto.alteracoes[i]
+        let alt2 = produto.alteracoes[i + 1]
+        let intervalo = (alt2.data - alt1.data) / 1000 / 60 / 60 / 24 / 30
+        let variacao = alt2.quantidade - alt1.quantidade
+        uso.push(variacao / intervalo)
+      }
+    }
+    let mes = uso.reduce((prev, curr) => (prev + curr) / 2).toFixed(1)
+    produto.mes = (mes > 0) ? mes : mes * -1
+    let fim = (produto.alteracoes[produto.alteracoes.length - 1].quantidade / produto.mes).toFixed(0)
+    produto.fim = (fim > 0) ? fim : 0
+    return produto
   },
   update: (id, novoProduto) => {
     const index = produtos.findIndex(prod => prod.id === Number(id))
@@ -56,9 +72,9 @@ export default {
   novaAlteracao: (id, data, quantidade) => {
     const index = produtos.findIndex(prod => prod.id === Number(id))
 
-    if (index) {
+    if (index !== undefined) {
       const produto = produtos[index]
-      produto.alteracoes.push({data, quantidade})
+      produto.alteracoes.push({ data: new Date(data), quantidade })
       produtos[index] = produto
       return produtos[index]
     } else {
