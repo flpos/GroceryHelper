@@ -43,20 +43,20 @@ export default class Detalhes extends Component {
   }
   excluir = () => {
     database.delete(this.id)
-    this.setState({produto: database.read(this.id)})
+    this.setState({ produto: database.read(this.id) })
   }
   render() {
-    return ( (this.state.produto !== undefined)?
+    return ((this.state.produto !== undefined) ?
       <Container id="detalhes">
         <Row>
-          <Col id="dados">
+          <Col id="dados" sm={12}>
             <h3>{this.state.produto.nome}</h3>
           </Col>
 
-          <Col id='previsoes'>
+          <Col id='previsoes' sm={12}>
             <Row>
               <Col xs={8}>Acaba em:</Col>
-              <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1)?'meses':'mês'}</Col>
+              <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1) ? 'meses' : 'mês'}</Col>
             </Row>
             <Row>
               <Col xs={8}>Uso estimado por Mês:</Col>
@@ -67,7 +67,7 @@ export default class Detalhes extends Component {
         </Row>
 
         <Row>
-          <Col id="alteracoes">
+          <Col id="alteracoes" sm={12}>
             <ListGroup>
               {
                 this.state.produto.alteracoes && this.state.produto.alteracoes.map((alt, index) => (
@@ -83,7 +83,7 @@ export default class Detalhes extends Component {
             </ListGroup>
           </Col>
 
-          <Col>
+          <Col sm={12}>
             <div id="graficos"></div>
           </Col>
         </Row>
