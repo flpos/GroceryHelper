@@ -36,7 +36,7 @@ export default {
     let produto = produtos.find(prod => prod.id === Number(id))
 
     let uso = []
-    if (!!produto.alteracoes) {
+    if (!!produto && produto.alteracoes.length > 1) {
       for (let i = 0; i < produto.alteracoes.length - 1; i++) {
         let alt1 = produto.alteracoes[i]
         let alt2 = produto.alteracoes[i + 1]
@@ -44,11 +44,11 @@ export default {
         let variacao = alt2.quantidade - alt1.quantidade
         uso.push(variacao / intervalo)
       }
+      let mes = uso.reduce((prev, curr) => (prev + curr) / 2).toFixed(1)
+      produto.mes = (mes > 0) ? mes : mes * -1
+      let fim = (produto.alteracoes[produto.alteracoes.length - 1].quantidade / produto.mes).toFixed(1)
+      produto.fim = (fim > 0) ? fim : 0
     }
-    let mes = uso.reduce((prev, curr) => (prev + curr) / 2).toFixed(1)
-    produto.mes = (mes > 0) ? mes : mes * -1
-    let fim = (produto.alteracoes[produto.alteracoes.length - 1].quantidade / produto.mes).toFixed(0)
-    produto.fim = (fim > 0) ? fim : 0
     return produto
   },
   update: (id, novoProduto) => {
@@ -74,7 +74,7 @@ export default {
 
     if (index !== undefined) {
       const produto = produtos[index]
-      produto.alteracoes.push({ data: new Date(data), quantidade })
+      produto.alteracoes.push({ data: new Date(data), quantidade: Number(quantidade) })
       produtos[index] = produto
       return produtos[index]
     } else {

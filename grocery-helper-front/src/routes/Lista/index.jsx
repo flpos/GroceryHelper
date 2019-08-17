@@ -31,7 +31,7 @@ export default class Lisa extends React.Component {
           }
         </ListGroup>
 
-        <Form onSubmit={this.novoProdutoHandler.bind(this)}>
+        <Form onSubmit={this.novoProdutoHandler.bind(this)} style={{marginTop:20+'px'}}>
           <InputGroup>
             <FormControl
               placeholder="Novo Item"

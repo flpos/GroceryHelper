@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import { Row, Col, Container, Button, ListGroup, Form, FormGroup, FormControl } from 'react-bootstrap'
-import moment from 'moment'
 
+import moment from 'moment'
 
 import database from '../../services/produtos'
 import './styles.css'
-
 
 export default class Detalhes extends Component {
   constructor(params) {
@@ -21,6 +21,7 @@ export default class Detalhes extends Component {
   }
   mostrarModal = (e) => {
     e.preventDefault()
+    document.querySelector('#data').value = new Date().toISOString().slice(0, 10)
     document.querySelector('#modal').removeAttribute('hidden')
   }
   esconderModal = (e) => {
@@ -40,8 +41,12 @@ export default class Detalhes extends Component {
     let produto = database.read(id)
     this.setState({ produto })
   }
+  excluir = () => {
+    database.delete(this.id)
+    this.setState({produto: database.read(this.id)})
+  }
   render() {
-    return (
+    return ( (this.state.produto !== undefined)?
       <Container id="detalhes">
         <Row>
           <Col id="dados">
@@ -84,7 +89,7 @@ export default class Detalhes extends Component {
         </Row>
 
         <Row style={{ padding: 15 + "px" }}>
-          <Button block variant="danger">Excluir</Button>
+          <Button block variant="danger" onClick={this.excluir}>Excluir</Button>
         </Row>
         <Form id="modal" hidden>
           <FormGroup id='container'>
@@ -95,7 +100,7 @@ export default class Detalhes extends Component {
             <Button type="reset" variant="danger" block onClick={this.esconderModal}>Cancelar</Button>
           </FormGroup>
         </Form>
-      </Container>
+      </Container> : <Redirect to={'/'} />
     )
   }
 }
