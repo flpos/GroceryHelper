@@ -49,11 +49,11 @@ export default class Detalhes extends Component {
     return ((this.state.produto !== undefined) ?
       <Container id="detalhes">
         <Row>
-          <Col id="dados" sm={12}>
+          <Col id="dados" sm={12} md={6}>
             <h3>{this.state.produto.nome}</h3>
           </Col>
 
-          <Col id='previsoes' sm={12}>
+          <Col id='previsoes' sm={12} md={6}>
             <Row>
               <Col xs={8}>Acaba em:</Col>
               <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1) ? 'meses' : 'mês'}</Col>
@@ -67,7 +67,7 @@ export default class Detalhes extends Component {
         </Row>
 
         <Row>
-          <Col id="alteracoes" sm={12}>
+          <Col id="alteracoes" sm={12} md={6}>
             <ListGroup>
               {
                 this.state.produto.alteracoes && this.state.produto.alteracoes.map((alt, index) => (
@@ -83,7 +83,7 @@ export default class Detalhes extends Component {
             </ListGroup>
           </Col>
 
-          <Col sm={12}>
+          <Col sm={12} md={6}>
             <div id="graficos"></div>
           </Col>
         </Row>
