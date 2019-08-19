@@ -5,3 +5,5 @@ Ele mantem uma lista de produtos, criada pelo usuário, com informações como "
 
 # Como utilizar
 O usuário deve adicionar o produto que ele deseja acompanhar, e adicionar alterações de quantidade.
+
+[Acesse a Aplicação](https://groceryhelper.mybluemix.net/)
