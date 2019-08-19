@@ -21,6 +21,16 @@ let produtos = [
     alteracoes: []
   }
 ]
+let local = localStorage.getItem('produtos')
+if (!local) localStorage.setItem('produtos', JSON.stringify(produtos))
+else produtos = JSON.parse(local)
+
+const saveToLocal = () => {
+  localStorage.setItem('produtos', JSON.stringify(produtos))
+}
+const readFromLocal = () => {
+  produtos = JSON.parse(localStorage.getItem('produtos'))
+}
 
 export default {
   create: nomeProduto => {
@@ -30,17 +40,19 @@ export default {
       alteracoes: []
     }
     produtos.push(novo)
+    saveToLocal()
     return novo
   },
   read: id => {
+    readFromLocal()
     let produto = produtos.find(prod => prod.id === Number(id))
-
+    console.log(produto)
     let uso = []
     if (!!produto && produto.alteracoes.length > 1) {
       for (let i = 0; i < produto.alteracoes.length - 1; i++) {
         let alt1 = produto.alteracoes[i]
         let alt2 = produto.alteracoes[i + 1]
-        let intervalo = (alt2.data - alt1.data) / 1000 / 60 / 60 / 24 / 30
+        let intervalo = (new Date(alt2.data) - new Date(alt1.data)) / 1000 / 60 / 60 / 24 / 30
         let variacao = alt2.quantidade - alt1.quantidade
         uso.push(variacao / intervalo)
       }
@@ -58,6 +70,7 @@ export default {
       const antigo = produtos[index]
       antigo.nome = novoProduto.nome
       produtos[index] = antigo
+      saveToLocal()
       return produtos[index]
     } else {
       return null
@@ -65,8 +78,10 @@ export default {
   },
   delete: id => {
     produtos = produtos.filter(prod => prod.id !== Number(id))
+    saveToLocal()
   },
   list: () => {
+    readFromLocal()
     return produtos
   },
   novaAlteracao: (id, data, quantidade) => {
@@ -76,6 +91,7 @@ export default {
       const produto = produtos[index]
       produto.alteracoes.push({ data: new Date(data), quantidade: Number(quantidade) })
       produtos[index] = produto
+      saveToLocal()
       return produtos[index]
     } else {
       return null
