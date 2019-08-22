@@ -15,8 +15,4 @@ Router.route('/produto/:id/alteracao/:altId?')
     .put(produtoController.alteracao.update)
     .delete(produtoController.alteracao.delete)
 
-Router.all('/', (req, res) => {
-    res.json('Bem vindo!')
-})
-
 module.exports = Router

@@ -11,14 +11,14 @@ export default class Lisa extends React.Component {
     produtos: []
   }
   componentDidMount() {
-    let produtos = database.list()
-    this.setState({ produtos })
+    database.list().then(produtos => this.setState({ produtos }))
   }
-  novoProdutoHandler(e) {
+  async novoProdutoHandler(e) {
     e.preventDefault()
-    this.setState({
-      produtos: [...this.state.produtos, database.create(document.querySelector('#NovoItem').value)]
-    })
+    await database
+      .create(document.querySelector('#NovoItem').value)
+      .then(data => this.setState({ produtos: [...this.state.produtos, data] }))
+      .catch(err => console.log(err))
     document.querySelector('#NovoItem').value = ''
   }
   render() {
@@ -26,12 +26,12 @@ export default class Lisa extends React.Component {
       <Container className="lista-produtos">
         <ListGroup>
           {
-            this.state.produtos
-              .map(prod => <Produto key={prod.id} {...prod} />)
+            !!this.state.produtos && this.state.produtos
+              .map(prod => <Produto key={prod._id} id={prod._id} {...prod} />)
           }
         </ListGroup>
 
-        <Form onSubmit={this.novoProdutoHandler.bind(this)} style={{marginTop:20+'px'}}>
+        <Form onSubmit={this.novoProdutoHandler.bind(this)} style={{ marginTop: 20 + 'px' }}>
           <InputGroup>
             <FormControl
               placeholder="Novo Item"

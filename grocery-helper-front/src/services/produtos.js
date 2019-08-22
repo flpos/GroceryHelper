@@ -1,100 +1,75 @@
-let produtos = [
-  {
-    id: 0,
-    nome: 'Arroz',
-    alteracoes: [
-      {
-        data: new Date('2019-06-15'),
-        quantidade: 20
-      },
-      {
-        data: new Date('2019-07-17'),
-        quantidade: 10
-      }
-    ],
-    fim: "Amanhã",
-    mes: "10"
-  },
-  {
-    id: 1,
-    nome: 'Feijão',
-    alteracoes: []
-  }
-]
-let local = localStorage.getItem('produtos')
-if (!local) localStorage.setItem('produtos', JSON.stringify(produtos))
-else produtos = JSON.parse(local)
+import axios from 'axios'
 
-const saveToLocal = () => {
-  localStorage.setItem('produtos', JSON.stringify(produtos))
-}
-const readFromLocal = () => {
-  produtos = JSON.parse(localStorage.getItem('produtos'))
-}
+const url = process.env.CF_DOMAIN ? `${process.env.CF_HOSTNAME}.${process.env.CF_DOMAIN}` : 'localhost:3001'
 
 export default {
-  create: nomeProduto => {
-    const novo = {
-      id: produtos.length,
-      nome: nomeProduto,
-      alteracoes: []
-    }
-    produtos.push(novo)
-    saveToLocal()
-    return novo
+  create: async nomeProduto => {
+    let novoProduto = {}
+    await axios({
+      url: `http://${url}/produto`,
+      method: "POST",
+      data: { produto: { nome: nomeProduto } }
+    })
+      .then(response => novoProduto = response.data)
+      .catch(response => console.log(response))
+    return novoProduto
   },
-  read: id => {
-    readFromLocal()
-    let produto = produtos.find(prod => prod.id === Number(id))
-    console.log(produto)
-    let uso = []
-    if (!!produto && produto.alteracoes.length > 1) {
-      for (let i = 0; i < produto.alteracoes.length - 1; i++) {
-        let alt1 = produto.alteracoes[i]
-        let alt2 = produto.alteracoes[i + 1]
-        let intervalo = (new Date(alt2.data) - new Date(alt1.data)) / 1000 / 60 / 60 / 24 / 30
-        let variacao = alt2.quantidade - alt1.quantidade
-        uso.push(variacao / intervalo)
-      }
-      let mes = uso.reduce((prev, curr) => (prev + curr) / 2).toFixed(1)
-      produto.mes = (mes > 0) ? mes : mes * -1
-      let fim = (produto.alteracoes[produto.alteracoes.length - 1].quantidade / produto.mes).toFixed(1)
-      produto.fim = (fim > 0) ? fim : 0
-    }
+  read: async id => {
+    let produto = {}
+    await axios({
+      url: `http://${url}/produto/${id}`,
+      method: "GET"
+    })
+      .then(response => produto = response.data)
+      .catch(response => console.log(response))
     return produto
   },
-  update: (id, novoProduto) => {
-    const index = produtos.findIndex(prod => prod.id === Number(id))
-
-    if (index) {
-      const antigo = produtos[index]
-      antigo.nome = novoProduto.nome
-      produtos[index] = antigo
-      saveToLocal()
-      return produtos[index]
-    } else {
-      return null
-    }
+  update: async (id, novoProduto) => { },
+  delete: async id => {
+    return axios({
+      url: `http://${url}/produto/${id}`,
+      method: 'DELETE'
+    }).then(result => result)
   },
-  delete: id => {
-    produtos = produtos.filter(prod => prod.id !== Number(id))
-    saveToLocal()
-  },
-  list: () => {
-    readFromLocal()
+  list: async () => {
+    let produtos
+    await axios({
+      url: `http://${url}/produto`,
+      method: "GET"
+    }).then(response => produtos = response.data)
     return produtos
   },
-  novaAlteracao: (id, data, quantidade) => {
-    const index = produtos.findIndex(prod => prod.id === Number(id))
 
-    if (index !== undefined) {
-      const produto = produtos[index]
-      produto.alteracoes.push({ data: new Date(data), quantidade: Number(quantidade) })
-      produtos[index] = produto
-      saveToLocal()
-      return produtos[index]
-    } else {
-      return null
-    }
+  /**Configurar a criação de alteração */
+  criarAlteracao: async (id, data, quantidade) => {
+    let result = await axios({
+      url: `http://${url}/produto/${id}/alteracao`,
+      method: 'POST',
+      data: {
+        alteracao: {
+          data, quantidade
+        }
+      }
+    })
+    return result
+  },
+  editarAlteracao: async (idProduto, idAlteracao, data, quantidade) => {
+    let produto = await axios({
+      url: `http://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
+      method: "PUT",
+      data: {
+        alteracao: {
+          data,
+          quantidade
+        }
+      }
+    })
+    return produto
+  },
+  excluirAlteracao: async (idProduto, idAlteracao) => {
+    return await axios({
+      url: `http://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
+      method: "DELETE"
+    })
   }
 }

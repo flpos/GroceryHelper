@@ -11,7 +11,7 @@ const produtoController = {
     read: (req, res) => {
         let { id } = req.params
         if (id) {
-            Produto.find({ _id: { $eq: id } }, (err, prod) => {
+            Produto.findOne({ _id: { $eq: id } }, (err, prod) => {
                 return res.json(prod)
             })
         }
@@ -62,7 +62,7 @@ const produtoController = {
             const { id: produtoId, altId } = req.params
 
             Produto.findById(produtoId, (err, produto) => {
-                produto.alteracoes = produto.alteracoes.filter(alt => alt._id === altId)
+                produto.alteracoes = produto.alteracoes.filter(alt => alt._id != altId)
                 produto.save()
                 res.json(produto)
             })

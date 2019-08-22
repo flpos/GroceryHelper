@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "name": "grocery-helper",
+    "workspaces": [
+        "grocery-helper-back",
+        "grocery-helper-front"
+    ],
+    "scripts": {
+        "client-dev": "yarn workspace grocery-helper-front dev",
+        "build": "yarn workspace grocery-helper-front build",
+        "server-dev": "yarn workspace grocery-helper-back dev",
+        "start": "yarn workspace grocery-helper-back start",
+        "dev": "concurrently --kill-others-on-fail \"yarn server-dev\"  \"yarn client-dev\""
+    },
+    "dependencies": {
+        "concurrently": "^4.1.2"
+    }
+}
