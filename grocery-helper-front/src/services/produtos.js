@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const url = process.env.CF_DOMAIN ? `${process.env.CF_HOSTNAME}.${process.env.CF_DOMAIN}` : 'localhost:3001'
+const url = `groceryhelper.mybluemix.net`
 
 export default {
   create: async nomeProduto => {
