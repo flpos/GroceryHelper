@@ -6,7 +6,7 @@ export default {
   create: async nomeProduto => {
     let novoProduto = {}
     await axios({
-      url: `http://${url}/produto`,
+      url: `https://${url}/produto`,
       method: "POST",
       data: { produto: { nome: nomeProduto } }
     })
@@ -17,7 +17,7 @@ export default {
   read: async id => {
     let produto = {}
     await axios({
-      url: `http://${url}/produto/${id}`,
+      url: `https://${url}/produto/${id}`,
       method: "GET"
     })
       .then(response => produto = response.data)
@@ -27,14 +27,14 @@ export default {
   update: async (id, novoProduto) => { },
   delete: async id => {
     return axios({
-      url: `http://${url}/produto/${id}`,
+      url: `https://${url}/produto/${id}`,
       method: 'DELETE'
     }).then(result => result)
   },
   list: async () => {
     let produtos
     await axios({
-      url: `http://${url}/produto`,
+      url: `https://${url}/produto`,
       method: "GET"
     }).then(response => produtos = response.data)
     return produtos
@@ -43,7 +43,7 @@ export default {
   /**Configurar a criação de alteração */
   criarAlteracao: async (id, data, quantidade) => {
     let result = await axios({
-      url: `http://${url}/produto/${id}/alteracao`,
+      url: `https://${url}/produto/${id}/alteracao`,
       method: 'POST',
       data: {
         alteracao: {
@@ -55,7 +55,7 @@ export default {
   },
   editarAlteracao: async (idProduto, idAlteracao, data, quantidade) => {
     let produto = await axios({
-      url: `http://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
+      url: `https://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
       method: "PUT",
       data: {
         alteracao: {
@@ -68,7 +68,7 @@ export default {
   },
   excluirAlteracao: async (idProduto, idAlteracao) => {
     return await axios({
-      url: `http://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
+      url: `https://${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
       method: "DELETE"
     })
   }
