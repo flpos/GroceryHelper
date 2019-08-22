@@ -13,6 +13,7 @@
         "dev": "concurrently --kill-others-on-fail \"yarn server-dev\"  \"yarn client-dev\""
     },
     "dependencies": {
+        "yarn": "^1.17.3"
         "concurrently": "^4.1.2"
     }
 }
