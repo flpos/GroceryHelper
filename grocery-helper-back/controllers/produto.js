@@ -4,7 +4,8 @@ const Produto = require('../models/produto')
 const usoPorMes = produto => {
     const { alteracoes } = produto
     let uso = 0
-    if (alteracoes == undefined || alteracoes.lenght < 1) return null
+
+    if (alteracoes == undefined || alteracoes.length < 2) return null
     // identificar intervalor onde há diminuição
     // vamos iterar o array e pegar a quantidade usada e os dias que passaram
     let diminuicao = []
@@ -18,15 +19,19 @@ const usoPorMes = produto => {
         let quantidade = alteracoes[i].quantidade - alteracoes[i + 1].quantidade
         if (quantidade > 0) diminuicao.push({ intervalo, quantidade })
     }
-    // definir uso
-    uso = diminuicao
-        .map(val => ({ x: (val.quantidade * val.intervalo), peso: val.intervalo }))
-        .reduce((prev, curr) => ({ x: prev.x + curr.x, peso: prev.peso + curr.peso }))
-    uso = uso.x / uso.peso
-    return uso
+    if (diminuicao.length < 1) return null
+    else if (diminuicao.length === 1) uso = diminuicao[0].quantidade / diminuicao[0].intervalo
+    else {
+        // definir uso
+        uso = diminuicao
+            .map(val => ({ x: (val.quantidade * val.intervalo), peso: val.intervalo }))
+            .reduce((prev, curr) => ({ x: prev.x + curr.x, peso: prev.peso + curr.peso }))
+        uso = uso.x / uso.peso
+    }
+    return uso.toFixed(2)
 }
 const duracaoEstimada = produto => {
-    if (produto.mes > 0) return (produto.alteracoes[produto.alteracoes.length - 1].quantidade / (produto.mes))
+    if (produto.mes > 0) return (produto.alteracoes[produto.alteracoes.length - 1].quantidade / (produto.mes)).toFixed(1)
     else return null
 }
 
@@ -75,7 +80,7 @@ const produtoController = {
                 })
                 produto.mes = usoPorMes(produto)
                 produto.fim = duracaoEstimada(produto)
-                produto.save()
+                produto.save().catch(e=>console.log(e))
                 res.json(produto)
             })
         },
@@ -87,7 +92,7 @@ const produtoController = {
                 produto.alteracoes = produto.alteracoes.map(alt => (alt._id == altId) ? alteracao : alt)
                 produto.mes = usoPorMes(produto)
                 produto.fim = duracaoEstimada(produto)
-                produto.save()
+                produto.save().catch(e=>console.log(e))
                 res.json(produto)
             })
         },
@@ -98,7 +103,7 @@ const produtoController = {
                 produto.alteracoes = produto.alteracoes.filter(alt => alt._id != altId)
                 produto.mes = usoPorMes(produto)
                 produto.fim = duracaoEstimada(produto)
-                produto.save()
+                produto.save().catch(e=>console.log(e))
                 res.json(produto)
             })
         },

@@ -101,10 +101,10 @@ export default class Detalhes extends Component {
           <Col id='previsoes' sm={12} md={6}>
             <Row>
               <Col xs={8}>Acaba em:</Col>
-              <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1) ? 'meses' : 'mês'}</Col>
+              <Col className='align-right'>{this.state.produto.fim} {(this.state.produto.fim > 1) ? 'dias' : 'dia'}</Col>
             </Row>
             <Row>
-              <Col xs={8}>Uso estimado por Mês:</Col>
+              <Col xs={8}>Uso estimado por dia:</Col>
               <Col className='align-right'>{this.state.produto.mes}</Col>
             </Row>
           </Col>
