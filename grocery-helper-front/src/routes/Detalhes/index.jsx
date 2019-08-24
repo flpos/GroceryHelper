@@ -2,10 +2,25 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom'
 import { Row, Col, Container, Button, ListGroup, Form, FormGroup, FormControl } from 'react-bootstrap'
 
-import moment from 'moment'
-
 import database from '../../services/produtos'
 import './styles.css'
+
+import moment from 'moment'
+import 'moment/locale/pt-br'
+
+moment.updateLocale('pt-br', {
+  calendar: {
+    lastDay: '[Ontem]',
+    sameDay: '[Hoje]',
+    nextDay: '[Amanhã]',
+    lastWeek: 'dddd, DD/MM',
+    nextWeek: 'dddd',
+    sameElse: 'ddd, ll'
+  },
+  relativeTime: {
+    hh: 'Hoje'
+  }
+})
 
 export default class Detalhes extends Component {
   constructor(params) {
@@ -107,8 +122,8 @@ export default class Detalhes extends Component {
                     onClick={() => this.mostrarModal(alt._id)}
                   >
                     <Row>
-                      <Col>{moment(alt.data).fromNow()}</Col>
-                      <Col className='align-right'>{alt.quantidade}</Col>
+                      <Col xs={9}>{moment(alt.data.slice(0, 10), "YYYY-MM-DD").calendar()}</Col>
+                      <Col xs={3} className='align-right'>{alt.quantidade}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))
