@@ -11,7 +11,7 @@
 #modal {
     height: 400px;
     width: 700px;
-    position: absolute;
+    position: fixed;
     background-color: #0009;
     top: 0px;
     left: 0px;
