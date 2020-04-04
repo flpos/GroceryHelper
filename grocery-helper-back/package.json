@@ -9,10 +9,31 @@
     "mongoose": "^5.7.5"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "@types/express": "^4.17.4",
+    "@types/mongoose": "^5.7.8",
+    "node-ts": "^5.0.5",
+    "nodemon": "^1.19.1",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "build": "tsc",
+    "prestart": "yarn build",
+    "start": "node dist/server.js",
+    "dev": "nodemon",
+    "debug": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+    "debug:watch": "nodemon yarn debug"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "yarn start",
+    "ext": "ts"
   }
 }
