@@ -1,9 +1,7 @@
 const Router = require('express').Router()
 
-const { produtoController, alteracaoController } = require('./controllers/produto')
-const usuarioController = require('./controllers/usuario')
-
-const test = (req, res) => res.send({ path: req.path, params: req.params, body: req.body })
+import { produtoController, alteracaoController } from './controllers/produto'
+import { usuarioController } from './controllers/usuario'
 
 Router.route('/produto/:id?')
     .post(produtoController.create)
@@ -16,10 +14,10 @@ Router.route('/produto/:id/alteracao/:altId?')
     .put(alteracaoController.update)
     .delete(alteracaoController.delete)
 
-Router.route('/usuario')
+Router.route('/usuario/:userId?')
     .post(usuarioController.create)
     .get(usuarioController.read)
     .put(usuarioController.update)
     .delete(usuarioController.delete)
 
-module.exports = Router
+export default Router
