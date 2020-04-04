@@ -1,8 +1,8 @@
 import { Schema, model, Document } from 'mongoose'
 
-import { alteracaoSchema, Alteracao } from './alteracao'
+import { alteracaoSchema, AlteracaoDoc } from './alteracao'
 
-let produtoSchema = new Schema({
+export const produtoSchema = new Schema({
     nome: String,
     quantidade: Number,
     alteracoes: [alteracaoSchema],
@@ -12,10 +12,12 @@ let produtoSchema = new Schema({
 
 export default model('produto', produtoSchema)
 
-export type Produto = Document & {
+export type Produto = {
     nome: String,
     quantidade: Number,
-    alteracoes: Array<Alteracao>,
+    alteracoes: Array<AlteracaoDoc>,
     fim: Number,
     mes: Number
 }
+
+export type ProdutoDoc = Produto & Document

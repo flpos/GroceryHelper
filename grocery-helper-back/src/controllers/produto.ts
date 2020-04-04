@@ -1,5 +1,5 @@
-import ProdutoModel, { Produto } from "../models/produto"
-import { Alteracao } from '../models/alteracao'
+import ProdutoModel, { Produto, ProdutoDoc } from "../models/produto"
+import { AlteracaoDoc } from '../models/alteracao'
 import { RequestHandler } from "express"
 import { Document } from "mongoose"
 
@@ -79,12 +79,12 @@ export class alteracaoController {
         const { id: produtoId } = req.params
         const { alteracao } = req.body
 
-        ProdutoModel.findById(produtoId, (err, produto:Produto & Document) => {
+        ProdutoModel.findById(produtoId, (err, produto: ProdutoDoc) => {
             if (produto) {
                 produto.alteracoes.push(({
                     data: new Date(alteracao.data),
                     quantidade: alteracao.quantidade
-                } as Alteracao))
+                } as AlteracaoDoc))
                 produto.mes = usoPorMes(produto)
                 produto.fim = duracaoEstimada(produto)
                 produto.save().catch(e => console.log(e))
@@ -98,7 +98,7 @@ export class alteracaoController {
         const { id: produtoId, altId } = req.params
         const { alteracao } = req.body
 
-        ProdutoModel.findById(produtoId, (err, produto:Produto) => {
+        ProdutoModel.findById(produtoId, (err, produto: ProdutoDoc) => {
             if (produto) {
                 produto.alteracoes = produto.alteracoes.map(alt => (alt._id == altId) ? alteracao : alt)
                 produto.mes = usoPorMes(produto)
@@ -113,7 +113,7 @@ export class alteracaoController {
     static delete: RequestHandler = (req, res) => {
         const { id: produtoId, altId } = req.params
 
-        ProdutoModel.findById(produtoId, (err, produto:Produto) => {
+        ProdutoModel.findById(produtoId, (err, produto: ProdutoDoc) => {
             if (produto) {
                 produto.alteracoes = produto.alteracoes.filter(alt => alt._id != altId)
                 produto.mes = usoPorMes(produto)

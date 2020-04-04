@@ -11,7 +11,9 @@ export const alteracaoSchema = new Schema({
     }
 })
 
-export type Alteracao = Document & {
+export type Alteracao = {
     data: Date,
     quantidade: number
 }
+
+export type AlteracaoDoc = Alteracao & Document
