@@ -10,10 +10,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors({ origin: '*' }))
 
-const { username, password } = require('./dbconfig.json')
+const { username, password } = require('../config/dbconfig.json')
 
 mongoose.connect(`mongodb+srv://${username}:${password}@cluster0-5dvpd.mongodb.net/groceryHelper?retryWrites=true&w=majority`
-    , { useNewUrlParser: true }
+    , { useNewUrlParser: true, useUnifiedTopology: true }
     , (err) => {
         if (err) console.log(err)
         console.log('Banco de dados conectado')
