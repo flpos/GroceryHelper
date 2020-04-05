@@ -4,7 +4,7 @@ import axios from 'axios'
 const url = `https://groceryhelper.mybluemix.net`
 
 export default {
-  create: async nomeProduto => {
+  create: async (nomeProduto: string) => {
     let novoProduto = {}
     await axios({
       url: `${url}/produto`,
@@ -15,7 +15,7 @@ export default {
       .catch(response => console.log(response))
     return novoProduto
   },
-  read: async id => {
+  read: async (id: string) => {
     let produto = {}
     await axios({
       url: `${url}/produto/${id}`,
@@ -25,8 +25,8 @@ export default {
       .catch(response => console.log(response))
     return produto
   },
-  update: async (id, novoProduto) => { },
-  delete: async id => {
+  update: async (id: string, novoProduto: Produto) => { },
+  delete: async (id: string) => {
     return axios({
       url: `${url}/produto/${id}`,
       method: 'DELETE'
@@ -42,7 +42,7 @@ export default {
   },
 
   /**Configurar a criação de alteração */
-  criarAlteracao: async (id, data, quantidade) => {
+  criarAlteracao: async (id: string, data: Date, quantidade: number) => {
     let result = await axios({
       url: `${url}/produto/${id}/alteracao`,
       method: 'POST',
@@ -54,7 +54,7 @@ export default {
     })
     return result
   },
-  editarAlteracao: async (idProduto, idAlteracao, data, quantidade) => {
+  editarAlteracao: async (idProduto: string, idAlteracao: string, data: string, quantidade: string) => {
     let produto = await axios({
       url: `${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
       method: "PUT",
@@ -67,10 +67,12 @@ export default {
     })
     return produto
   },
-  excluirAlteracao: async (idProduto, idAlteracao) => {
+  excluirAlteracao: async (idProduto: string, idAlteracao: string) => {
     return await axios({
       url: `${url}/produto/${idProduto}/alteracao/${idAlteracao}`,
       method: "DELETE"
     })
   }
 }
+
+export type Produto = any

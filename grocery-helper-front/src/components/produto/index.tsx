@@ -8,7 +8,12 @@ const styles = {
   color: 'black'
 }
 
-export default function produto(props) {
+export type produtoProps = {
+  id: string,
+  nome: string
+}
+
+export default function produto(props: produtoProps) {
   return (
     <Link to={`/detalhes/${props.id}`} style={styles}>
       <ListGroup.Item>
